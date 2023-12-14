@@ -139,3 +139,45 @@ kill <pid>
 ```
 Or Ctrl + c in the window to interrupt. (DO THIS)
 
+# Adding your own DAGs
+### To add your own DAG, go to the DAG directory where you installed airflow. For me it looks like this:
+```bash
+(base) username@ubuntu:~$ cd /home/username/anaconda3/envs/airflow-environment/lib/python3.11/site-packages/airflow/example_dags
+```
+
+### Create a new file named “test_dag.py” and paste your code written in Python into it:
+```bash
+(base) username@username:~/anaconda3/envs/airflow-environment/lib/python3.11/site-packages/airflow/example_dags$ nano test_dag.py
+```
+
+### Examle DAG:
+```bash
+from airflow import DAG
+from airflow.operators.dummy_operator import DummyOperator
+from datetime import datetime, timedelta
+
+# Определение параметров DAG
+default_args = {
+    'owner': 'your_name',
+    'start_date': datetime(2023, 1, 1),
+    'retries': 1,
+    'retry_delay': timedelta(minutes=5),
+}
+
+# Создание объекта DAG
+dag = DAG(
+    'my_dag_id',
+    default_args=default_args,
+    description='My DAG description',
+    schedule_interval=timedelta(days=1),  # Расписание выполнения
+)
+
+# Определение операторов (задач) в DAG
+start_task = DummyOperator(task_id='start_task', dag=dag)
+end_task = DummyOperator(task_id='end_task', dag=dag)
+
+# Определение порядка выполнения задач
+start_task >> end_task
+```
+### Now you can run the added DAG
+![test_dag.py](my_dag_id.png)
