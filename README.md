@@ -180,4 +180,9 @@ end_task = DummyOperator(task_id='end_task', dag=dag)
 start_task >> end_task
 ```
 ### Now you can run the added DAG
+```bash
+airflow dags trigger -e "2023-12-14" my_dag_id
+```
+Or do it manually via the web interface.
 ![test_dag.py](my_dag_id.png)
+After launch, if no errors occur, you will see success in the field: Status of all previous DAG runs.
